@@ -15,9 +15,9 @@ const NavBar = () => {
                 <Navbar.Brand><img src={logo} alt='logo' height="45"/></Navbar.Brand>
             </NavLink>
             <Nav className="me-auto">
-            <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/"><i className='fas fa-home'></i>Home</NavLink>
-            <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/signin"><i className='fas fa-sign-in-alt'></i>Sign in</NavLink>
-            <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/signup"><i className='fas fa-user-plus'></i>Sign up</NavLink>
+                <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/"><i className='fas fa-home'></i>Home</NavLink>
+                <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/signin"><i className='fas fa-sign-in-alt'></i>Sign in</NavLink>
+                <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/signup"><i className='fas fa-user-plus'></i>Sign up</NavLink>
             </Nav>
         </Container>
     </Navbar>
