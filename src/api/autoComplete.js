@@ -1,9 +1,11 @@
-import React, { useRef, useEffect, useState, useMemo } from "react";
+import React, { useRef, useEffect, useState} from "react";
 import Container from "react-bootstrap/Container";
 import appStyles from "../App.module.css";
 import Form from "react-bootstrap/Form";
 
+
 const AutoComplete = ({ onChange }) => {
+
     const autoCompleteRef = useRef();
     const inputRef = useRef();
     const [selectedPlace, setSelectedPlace] = useState(null);

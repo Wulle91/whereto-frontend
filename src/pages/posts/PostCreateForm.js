@@ -1,5 +1,5 @@
 import React, { useRef, useState } from "react";
-
+import Alert from "react-bootstrap/Alert";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Row from "react-bootstrap/Row";
@@ -15,7 +15,7 @@ import Asset from "../../comonents/Asset";
 import { Image } from "react-bootstrap";
 import AutoComplete from "../../api/autoComplete";
 import { useHistory } from "react-router-dom";
-import {axiosReq} from "../../api/axiosDefaults";
+import { axiosReq } from "../../api/axiosDefaults";
 
 function PostCreateForm() {
 
@@ -53,12 +53,12 @@ function PostCreateForm() {
 
     const handleLocationChange = (location, photo, address) => {
         setPostData({
-          ...postData,
-          location_name: location,
-          location_image: photo,
-          location_address: address  // Update the location state with the selected place name
+            ...postData,
+            location_name: location,
+            location_image: photo,
+            location_address: address  // Update the location state with the selected place name
         });
-      };
+    };
 
 
     const handleSubmit = async (event) => {
@@ -74,11 +74,11 @@ function PostCreateForm() {
 
         try {
             console.log(formData)
-            const {data} = await axiosReq.post('/posts/', formData)
+            const { data } = await axiosReq.post('/posts/', formData)
             history.push(`/posts/${data.id}`)
         } catch (err) {
             console.log(err)
-            if (err.response?.status !== 401){
+            if (err.response?.status !== 401) {
                 setErrors(err.response?.data)
             }
         }
@@ -94,14 +94,23 @@ function PostCreateForm() {
                     value={title}
                     onChange={handleChange} />
             </Form.Group>
+            {errors?.title?.map((message, idx) => (
+                <Alert variant="warning" key={idx}>
+                    {message}
+                </Alert>
+            ))}
             <Form.Group>
                 <AutoComplete
                     type="text"
                     name="location"
                     value={location_name}
-                    onChange={handleLocationChange}/>
+                    onChange={handleLocationChange} />
             </Form.Group>
-            
+            {errors?.title?.map((message, idx) => (
+                <Alert variant="warning" key={idx}>
+                    {message}
+                </Alert>
+            ))}
             <Form.Group>
                 <Form.Label>Tags</Form.Label>
                 <Form.Control
@@ -112,7 +121,11 @@ function PostCreateForm() {
                     onChange={handleChange}
                 />
             </Form.Group>
-
+            {errors?.content?.map((message, idx) => (
+                <Alert variant="warning" key={idx}>
+                    {message}
+                </Alert>
+            ))}
             <Button
                 className={`${btnStyles.Button} ${btnStyles.Blue}`}
                 onClick={() => history.goBack()}
@@ -135,16 +148,16 @@ function PostCreateForm() {
                         <Form.Group className="text-center">
                             {image ? (
                                 <>
-                                <figure>
-                                    <Image className={appStyles.Image} src={image} rounded />
-                                </figure>
-                                <div>
-                                    <Form.Label 
-                                        className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
-                                        htmlFor="image-upload">
+                                    <figure>
+                                        <Image className={appStyles.Image} src={image} rounded />
+                                    </figure>
+                                    <div>
+                                        <Form.Label
+                                            className={`${btnStyles.Button} ${btnStyles.Blue} btn`}
+                                            htmlFor="image-upload">
                                             Change the image
-                                    </Form.Label> 
-                                </div>
+                                        </Form.Label>
+                                    </div>
                                 </>
                             ) : (
                                 <Form.Label
@@ -158,12 +171,17 @@ function PostCreateForm() {
                                 </Form.Label>
                             )}
 
-                            <Form.File 
-                                id="image-upload" 
-                                accept="image/*" 
+                            <Form.File
+                                id="image-upload"
+                                accept="image/*"
                                 onChange={handleChangeImage}
                                 ref={imageInput} />
                         </Form.Group>
+                        {errors?.image?.map((message, idx) => (
+                            <Alert variant="warning" key={idx}>
+                                {message}
+                            </Alert>
+                        ))}
                         <div className="d-md-none" >{textFields}</div>
                     </Container>
                 </Col>
