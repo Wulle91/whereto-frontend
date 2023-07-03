@@ -9,3 +9,11 @@
 .Active i {
     color: #2142b2;
 }
+
+
+@media only screen and (max-width: 620px) {
+
+    .Hide{
+       display: none;
+     }
+  }
