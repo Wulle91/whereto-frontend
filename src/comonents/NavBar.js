@@ -38,7 +38,7 @@ const NavBar = () => {
       className={styles.NavLink} 
       activeClassName={styles.Active} 
       to="/followed">
-        <i class="fas fa-list"></i>
+        <i className="fas fa-list"></i>
           <span className={styles.Hide}>Bucket</span>
     </NavLink>
     {addPostIcon}
@@ -46,7 +46,7 @@ const NavBar = () => {
       className={styles.NavLink} 
       activeClassName={styles.Active} 
       to="/whereto">
-        <i class="fas fa-search-location"></i>
+        <i className="fas fa-search-location"></i>
           <span className={styles.Hide}>Whereto</span>
     </NavLink>
     <NavLink 
@@ -62,7 +62,7 @@ const NavBar = () => {
       className={styles.NavLink} 
       activeClassName={styles.Active} 
       to="/" onClick={handleSignOut}>
-        <i class="fas fa-search-location"></i>
+        <i className="fas fa-search-location"></i>
         <span className={styles.Hide}>Sign out</span>
     </NavLink>
   </>)

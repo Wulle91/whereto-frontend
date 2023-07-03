@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -14,6 +14,8 @@ import btnStyles from "../../styles/Button.module.css";
 import Asset from "../../comonents/Asset";
 import { Image } from "react-bootstrap";
 import AutoComplete from "../../api/autoComplete";
+import { useHistory } from "react-router-dom";
+import {axiosReq} from "../../api/axiosDefaults";
 
 function PostCreateForm() {
 
@@ -23,9 +25,15 @@ function PostCreateForm() {
         title: "",
         content: "",
         image: "",
+        location_image: "",
+        location_name: "",
+        location_address: "",
     });
-    const { title, content, image } = postData;
-
+    const { title, location_name, content, image, location_image, location_address } = postData;
+    console.log(postData)
+    const imageInput = useRef(null);
+    const history = useHistory();
+    console.log(postData)
     const handleChange = (event) => {
         setPostData({
             ...postData,
@@ -43,6 +51,39 @@ function PostCreateForm() {
         }
     };
 
+    const handleLocationChange = (location, photo, address) => {
+        setPostData({
+          ...postData,
+          location_name: location,
+          location_image: photo,
+          location_address: address  // Update the location state with the selected place name
+        });
+      };
+
+
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        const formData = new FormData();
+
+        formData.append('title', title)
+        formData.append('name', location_name)
+        formData.append('content', content)
+        formData.append('image', imageInput.current.files[0])
+        formData.append('image_url', location_image)
+        formData.append('address', location_address)
+
+        try {
+            console.log(formData)
+            const {data} = await axiosReq.post('/posts/', formData)
+            history.push(`/posts/${data.id}`)
+        } catch (err) {
+            console.log(err)
+            if (err.response?.status !== 401){
+                setErrors(err.response?.data)
+            }
+        }
+    }
+
     const textFields = (
         <div className="text-center">
             <Form.Group>
@@ -53,9 +94,14 @@ function PostCreateForm() {
                     value={title}
                     onChange={handleChange} />
             </Form.Group>
-            <AutoComplete
-                value={content}
-                onSubmit={handleChange} />
+            <Form.Group>
+                <AutoComplete
+                    type="text"
+                    name="location"
+                    value={location_name}
+                    onChange={handleLocationChange}/>
+            </Form.Group>
+            
             <Form.Group>
                 <Form.Label>Tags</Form.Label>
                 <Form.Control
@@ -69,7 +115,7 @@ function PostCreateForm() {
 
             <Button
                 className={`${btnStyles.Button} ${btnStyles.Blue}`}
-                onClick={() => { }}
+                onClick={() => history.goBack()}
             >
                 cancel
             </Button>
@@ -80,7 +126,7 @@ function PostCreateForm() {
     );
 
     return (
-        <Form>
+        <Form onSubmit={handleSubmit}>
             <Row>
                 <Col className="py-2 p-0 p-md-2" md={7} lg={8}>
                     <Container
@@ -112,9 +158,13 @@ function PostCreateForm() {
                                 </Form.Label>
                             )}
 
-                            <Form.File id="image-upload" onChange={handleChangeImage} />
+                            <Form.File 
+                                id="image-upload" 
+                                accept="image/*" 
+                                onChange={handleChangeImage}
+                                ref={imageInput} />
                         </Form.Group>
-                        <div className="d-md-none">{textFields}</div>
+                        <div className="d-md-none" >{textFields}</div>
                     </Container>
                 </Col>
                 <Col md={5} lg={4} className="d-none d-md-block p-0 p-md-2">
