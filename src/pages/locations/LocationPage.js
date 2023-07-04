@@ -41,18 +41,19 @@ function LocationPage() {
         backgroundImage: `url(${location.results[0]?.image_url})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
-        backgroundRepeat: "no-repeat"
+        backgroundRepeat: "no-repeat",
+        height: "300px",
       };
   
     return (
       <Row className="h-100">
         <Col className="py-2 p-0 p-lg-2" style={backgroundImageStyle} lg={8}>
-          <p>Popular profiles for mobile</p>
+          <p>popula</p>
+        </Col>
           <Location {...location.results[0]} setLocations={setLocation} LocationPage />
           <Container className={appStyles.Content}>
             Comments
           </Container>
-        </Col>
         <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
           Popular profiles for desktop
         </Col>

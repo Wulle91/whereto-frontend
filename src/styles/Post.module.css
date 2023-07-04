@@ -26,3 +26,8 @@
   .Divide {
     display: inline-block
   }
+
+  .Inline {
+    display: flex;
+    align-items: center;
+  }

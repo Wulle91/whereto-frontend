@@ -2,8 +2,8 @@ import React from "react";
 import styles from "../../styles/Locations.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { Link } from "react-router-dom";
-import Avatar from "../../comonents/Avatar";
+
+
 import { axiosRes } from "../../api/axiosDefaults";
 
 const Location= (props) => {
@@ -59,15 +59,7 @@ const Location= (props) => {
 
   return (
     <Card className={styles.Post}>
-      <Card.Body style={{ backgroundColor: "rgba(255, 255, 255, 0.8)" }}> 
-        <Media className="align-items-center justify-content-between">
-          <Link to={`/locations/${id}`}>
-            <Avatar src={image_url} height={85} />
-          </Link>
-        </Media>
-      </Card.Body>
-   
-      <Card.Body style={{ backgroundColor: "rgba(0, 0, 0, 0)" }}>
+      <Card.Body >
         {name && <Card.Title className="text-center">{name}</Card.Title>}
         {address && <Card.Text>{address}</Card.Text>}
         <div className={styles.PostBar}>

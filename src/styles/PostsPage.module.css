@@ -16,3 +16,16 @@
     cursor: default;
     color: #cfced3;
   }
+
+  .Inline {
+    display: flex;
+    align-items: center;
+  }
+
+  .Inline :nth-child(1) {
+   margin-bottom: 7px;
+  }
+
+  .Inline :nth-child(2) {
+    width: 100%;
+  }
