@@ -45,7 +45,7 @@ const NavBar = () => {
     <NavLink 
       className={styles.NavLink} 
       activeClassName={styles.Active} 
-      to="/whereto">
+      to="/locations">
         <i className="fas fa-search-location"></i>
           <span className={styles.Hide}>Whereto</span>
     </NavLink>
