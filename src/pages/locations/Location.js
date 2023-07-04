@@ -2,6 +2,10 @@ import React from "react";
 import styles from "../../styles/Locations.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import Avatar from "../../comonents/Avatar";
+import { Button } from "react-bootstrap";
+import btnStyles from "../../styles/Button.module.css";
 
 
 import { axiosRes } from "../../api/axiosDefaults";
@@ -12,6 +16,8 @@ const Location= (props) => {
     name,
     address,
     image_url,
+    mobile,
+    following_id,
     comments_count,
     likes_count,
     like_id,
@@ -60,15 +66,28 @@ const Location= (props) => {
   return (
     <Card className={styles.Post}>
       <Card.Body >
+          <Link className="align-self-center" to={`/locations/${id}`}>
+            <Avatar src={image_url} height={100} />
+          </Link>
         {name && <Card.Title className="text-center">{name}</Card.Title>}
         {address && <Card.Text>{address}</Card.Text>}
-        <div className={styles.PostBar}>
-          {likes_count}
-          {/* <Link to={`/posts/${id}`}>
-            <i className="far fa-comments" />
-          </Link> */}
-          {comments_count}
-        </div>
+        <div className={`text-right ${!mobile && "ml-auto"}`}>
+          {following_id ? (
+            <Button
+              className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
+              onClick={() => {}}
+            >
+              unfollow
+            </Button>
+          ) : (
+            <Button
+              className={`${btnStyles.Button} ${btnStyles.Black}`}
+              onClick={() => {}}
+            >
+              follow
+            </Button>
+          )}
+          </div>
       </Card.Body>
     </Card>
   );

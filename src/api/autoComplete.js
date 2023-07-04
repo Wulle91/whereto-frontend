@@ -30,7 +30,7 @@ const AutoComplete = ({ onChange }) => {
     useEffect(() => {
         if (selectedPlace) {
             const name = selectedPlace.name;
-            const photo = selectedPlace.photos[0].getUrl();
+            const photo = selectedPlace.photos[1].getUrl();
             const full_address = address_types.map( type => {
                 return selectedPlace.address_components.map( address => {
                     const my_type = address.types.some(key => key === type)

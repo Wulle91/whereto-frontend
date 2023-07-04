@@ -26,3 +26,11 @@
   .Divide {
     display: inline-block
   }
+
+  .Background {
+    
+    background-Size: "cover";
+    background-Position: "center";
+    background-Repeat: "no-repeat";
+    height: "350px",
+  }

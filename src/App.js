@@ -12,6 +12,8 @@ import PostsPage from "./pages/posts/PostsPage";
 import LocationPage from "./pages/locations/LocationPage";
 import LocationsPage from "./pages/locations/LocationsPage";
 import { useCurrentUser } from "./contexts/CurrentUserContext";
+import PostEditForm from "./pages/posts/PostEditForm";
+import ProfilePage from "./pages/profiles/ProfilePage";
 
 
 
@@ -30,9 +32,11 @@ function App() {
           <Route exact path="/signin" render={() => <SignInForm />} />
           <Route exact path="/signup" render={() => <SignUpForm />} />
           <Route exact path="/posts/create" render={() => <PostCreateForm/>} />
+          <Route exact path="/posts/:id/edit" render={() => <PostEditForm/>} />
           <Route exact path="/posts/:id" render={() => <PostPage/>} />
           <Route exact path="/locations/:id" render={() => <LocationPage/>} />
           <Route exact path="/locations" render={() => <LocationsPage/>} />
+          <Route exact path="/profiles/:id" render={() => <ProfilePage/>} />
           <Route
             exact
             path="/followed"

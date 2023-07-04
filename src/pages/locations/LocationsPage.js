@@ -70,15 +70,9 @@ function LocationsPage({ message, filter = "" }) {
             {location.results.length ? (
               <InfiniteScroll
                 children={location.results.map((location) => (
-                    
                     <Link to={`/locations/${location.id}`} key={location.id}>
-                        <div className={styles.Inline}>
-                        <Avatar src={location.image_url} height={85} />
                         <Location key={location.id} {...location} setloctions={setLocations} />
-                        </div>
-                    </Link>
-                    
-                    
+                    </Link>  
                 ))}
                 dataLength={location.results.length}
                 loader={<Asset spinner />}

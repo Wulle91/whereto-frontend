@@ -2,10 +2,11 @@ import React from "react";
 import styles from "../../styles/Post.module.css";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Card, Media, OverlayTrigger, Tooltip } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import Avatar from "../../comonents/Avatar";
 import { axiosRes } from "../../api/axiosDefaults";
 import { MoreDropdown } from "../../comonents/MoreDropdown";
+
 
 const Post = (props) => {
   const {
@@ -13,6 +14,7 @@ const Post = (props) => {
     owner,
     profile_id,
     profile_image,
+    location,
     comments_count,
     likes_count,
     like_id,
@@ -26,6 +28,20 @@ const Post = (props) => {
 
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
+  const history = useHistory();
+
+  const handleEdit = () => {
+    history.push(`/posts/${id}/edit`);
+  };
+
+  const handleDelete = async () => {
+    try {
+      await axiosRes.delete(`/posts/${id}/`);
+      history.goBack();
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   const handleLike = async () => {
     try {
@@ -59,7 +75,13 @@ const Post = (props) => {
     }
   };
 
-  src/pages/locations/LocationPage.js
+  // const backgroundImageStyle = {
+  //   backgroundImage: `url(${image})`,
+  //   backgroundSize: "cover",
+  //   backgroundPosition: "center",
+  //   backgroundRepeat: "no-repeat",
+  //   height: "300px",
+  // };
 
   return (
     <Card className={styles.Post}>
@@ -71,7 +93,9 @@ const Post = (props) => {
           </Link>
           <div className="d-flex align-items-center">
             <span>{updated_at}</span>
-            {is_owner && postPage && <MoreDropdown />}
+            {is_owner && postPage && <MoreDropdown 
+                handleEdit={handleEdit}
+                handleDelete={handleDelete}/>}
           </div>
         </Media>
       </Card.Body>
@@ -79,6 +103,7 @@ const Post = (props) => {
         <Card.Img src={image} alt={title} />
       </Link>
       <Card.Body>
+        {location && <Card.Text>{location}</Card.Text>}
         {title && <Card.Title className="text-center">{title}</Card.Title>}
         {content && <Card.Text>{content}</Card.Text>}
         <div className={styles.PostBar}>
