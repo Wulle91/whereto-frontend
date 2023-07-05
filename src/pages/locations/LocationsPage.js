@@ -8,11 +8,12 @@ import Avatar from "../../comonents/Avatar";
 import Location from "./Location";
 import Asset from "../../comonents/Asset";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router";
 import appStyles from "../../App.module.css";
 import styles from "../../styles/PostsPage.module.css";
 import { useLocation } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
-
+import Post from "../posts/Post";
 import NoResults from "../../assets/no-results.png";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { fetchMoreData } from "../../utils/utils";
@@ -20,14 +21,17 @@ import { fetchMoreData } from "../../utils/utils";
 function LocationsPage({ message, filter = "" }) {
   const [location, setLocations] = useState({ results: [] });
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [locationPosts, setLocationPosts] = useState({ results: [] });
   const { pathname } = useLocation();
+   const { id } = useParams();
 
   const [query, setQuery] = useState("");
 
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const { data } = await axiosReq.get(`/locations/?${filter}search=${query}`);
+        
+        const { data } = await axiosReq.get(`/locations/`);
         setLocations(data);
         setHasLoaded(true);
       } catch (err) {

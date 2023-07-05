@@ -21,6 +21,7 @@ const PopularLocations = ({ mobile }) => {
                 const { data } = await axiosReq.get(
                     "/locations/?ordering=-followers_count"
                 );
+                console.log(data)
                 setLocationData((prevState) => ({
                     ...prevState,
                     popularLocations: data,

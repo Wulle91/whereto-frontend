@@ -12,7 +12,7 @@ export const ProfileDataProvider = ({ children }) => {
   const [profileData, setProfileData] = useState({
     // we will use the pageProfile later!
     pageProfile: { results: [] },
-    popularProfiles: { results: [] },
+    popularLocations: { results: [] },
   });
 
   const currentUser = useCurrentUser();
@@ -21,11 +21,11 @@ export const ProfileDataProvider = ({ children }) => {
     const handleMount = async () => {
       try {
         const { data } = await axiosReq.get(
-          "/profiles/?ordering=-followers_count"
+          "/locations/?ordering=-followers_count"
         );
         setProfileData((prevState) => ({
           ...prevState,
-          popularProfiles: data,
+          popularLocations: data,
         }));
       } catch (err) {
         console.log(err);
