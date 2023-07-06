@@ -1,13 +1,20 @@
 import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import styles from "../styles/Map.module.css";
+
 
 
 const MyMapApp = () => {
   const { isLoaded } = useLoadScript({
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY,
+    googleMapsApiKey: 'AIzaSyBmL-44Kf_8U00-Og2iLESQZed6Wgs_H-8',
   });
-  const center = useMemo(() => ({ lat: 18.52043, lng: 73.856743 }), []);
+  const [latitude, setLatitude] = useState();
+  const [longitude, setLongitude] = useState();
+
+  navigator.geolocation.getCurrentPosition(function(position) {
+    setLatitude(position.coords.latitude);
+    setLongitude(position.coords.longitude);
+  });
 
   return (
     <div className={styles.App}>
@@ -16,9 +23,10 @@ const MyMapApp = () => {
       ) : (
         <GoogleMap 
           mapContainerClassName={styles.mapcontainer}
-          center={center}
+          center={{ lat: latitude, lng: longitude}}
           zoom={10}>
-          <Marker position={center} />
+          <Marker position={{ lat: latitude, lng: longitude}} />
+          <Marker position={{ lat: 48.532135, lng: 9.27781}} />
         </GoogleMap>  
       )}
     </div>

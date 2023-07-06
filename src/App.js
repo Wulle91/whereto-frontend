@@ -18,6 +18,7 @@ import UsernameForm from "./pages/profiles/UsernameForm";
 import UserPasswordForm from "./pages/profiles/UserPasswordForm";
 import ProfileEditForm from "./pages/profiles/ProfileEditForm";
 import LocationsFollowed from "./pages/locations/LocationsFollowed";
+import MyMapComponent from "../src/api/googleGeolocator" 
 
 
 function App() {

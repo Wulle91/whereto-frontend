@@ -49,6 +49,7 @@ function LocationPage(message, filter = "" ) {
   
         const locationResults = [locationData];
         setLocation({ results: locationResults });
+
   
         const postNames = postsData.results.map((post) => post);
         setRelatedPosts({ results: postNames });
@@ -69,7 +70,7 @@ function LocationPage(message, filter = "" ) {
         console.log(err);
       }
     };
-    console.log(followers)
+
     fetchData();
   }, [id, handleFollowLocation, handleUnfollowLocation]);
   

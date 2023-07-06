@@ -18,6 +18,8 @@ import NoResults from "../../assets/no-results.png";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { fetchMoreData } from "../../utils/utils";
 import MyMapApp from "../../api/mapLocation"
+import MyMapComponent from "../../api/googleGeolocator";
+
 
 
 
@@ -25,35 +27,26 @@ function LocationsPage({ message, filter = "" }) {
   const [location, setLocations] = useState({ results: [] });
   const [hasLoaded, setHasLoaded] = useState(false);
   const [locationPosts, setLocationPosts] = useState({ results: [] });
-  const [latitude, setLatitude] = useState();
-  const [longitude, setLongitude] = useState();
+  const [locationsNames, setLocationsNames] = useState()
   const { pathname } = useLocation();
    const { id } = useParams();
   const [query, setQuery] = useState("");
 
-  // navigator.geolocation.getCurrentPosition(function(position) {
-  //   setLatitude(position.coords.latitude);
-  //   setLongitude(position.coords.longitude);
-  // });
 
-  // console.log(latitude)
-  // console.log(longitude)
-  
-
-  
-
-
-  
   useEffect(() => {
     const fetchLocations = async () => {
       try {
         
         const { data } = await axiosReq.get(`/locations/`);
         setLocations(data);
+        const locationNames = data.results.map((locatio) => locatio)
+        const locNames = locationNames.map((loc) => loc.address)
+        setLocationsNames(locNames)
         setHasLoaded(true);
       } catch (err) {
         console.log(err);
       }
+ 
     };
 
     setHasLoaded(false);
@@ -69,10 +62,13 @@ function LocationsPage({ message, filter = "" }) {
 
   
 
+  
+
   return (
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
-        <MyMapApp />
+        {/* <MyMapApp /> */}
+        <MyMapComponent location={locationsNames}/>
         <Form
           className={styles.SearchBar}
           onSubmit={(event) => event.preventDefault()}
