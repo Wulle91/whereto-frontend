@@ -1,60 +1,61 @@
-import { useEffect, useState, useRef } from "react";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import { axiosReq } from "../api/axiosDefaults";
-
-
+import React, { useState } from 'react';
+import { GoogleMap, Marker, useLoadScript } from "@react-google-maps/api";
+import styles from "../styles/Asset.module.css";
+import axios from 'axios';
 
 function MyMapComponent({ location }) {
-    const locations = location
-    const google = window.google = window.google ? window.google : {};
-    const mapRef = useRef(null);
-    const geocoderRef = useRef(null);
-    const [latitude, setLatitude] = useState();
-    const [longitude, setLongitude] = useState();
-    console.log(location);
+    const locations = location;
+    const [latitude, setLatitude] = useState(0);
+    const [longitude, setLongitude] = useState(0);
+    const [markers, setMarkers] = useState([]);
+    const [loaded, setLoaded] = useState(false);
+    const tempMarkers = [];
+
     navigator.geolocation.getCurrentPosition(function (position) {
       setLatitude(position.coords.latitude);
       setLongitude(position.coords.longitude);
     });
-  
-    useEffect(() => {
-      if (latitude !== undefined && longitude !== undefined) {
-        const timer = setTimeout(() => {
-          initializeMap();
-        }, 1000); // Adjust the delay time as per your requirement
-  
-        return () => clearTimeout(timer);
-      }
-    }, [latitude, longitude]);
-  
-    function initializeMap() {
-      const latlng = new window.google.maps.LatLng(latitude, longitude);
-      const mapOptions = {
-        zoom: 8,
-        center: latlng
-      };
-  
-      const mapElement = document.getElementById("map");
-      mapRef.current = new window.google.maps.Map(mapElement, mapOptions);
-      geocoderRef.current = new window.google.maps.Geocoder();
-  
-      locations.forEach((address) => {
-        geocoderRef.current.geocode({ address }, function (results, status) {
-          if (status === "OK") {
-            const marker = new window.google.maps.Marker({
-              map: mapRef.current,
-              position: results[0].geometry.location
-            });
-          } else {
-            console.log(`Geocode was not successful for the following reason: ${status}`);
-          }
+
+    const { isLoaded } = useLoadScript({
+      googleMapsApiKey: 'AIzaSyBmL-44Kf_8U00-Og2iLESQZed6Wgs_H-8',
+    });
+
+    React.useEffect(() => {
+      if (locations && locations.length) {
+        locations.map((address) => {
+          axios.get('https://maps.googleapis.com/maps/api/geocode/json', {
+              params: {
+                address: address,
+                key: 'AIzaSyBmL-44Kf_8U00-Og2iLESQZed6Wgs_H-8',
+              },
+              withCredentials: false,
+          })
+          .then((response) => {
+              const { lat, lng } = response.data.results[0].geometry.location;
+              tempMarkers.push({ lat: lat, lng: lng });
+          })
         });
-      });
-    }
+      }
+      locations && tempMarkers.length === locations.length && setLoaded(true);
+      setMarkers(tempMarkers);
+    }, [locations])
   
     return (
-      <div>
-        <div id="map" style={{ width: "100%", height: "350px" }}></div>
+      <div style={{ height: '400px', width: '100%' }}>
+        {(!isLoaded && !loaded) ? (
+          <h1>Loading...</h1>
+        ) : (
+          <GoogleMap
+            mapContainerClassName={styles.mapContainer}
+            center={{ lat: Number(latitude), lng: Number(longitude) }}
+            zoom={10}
+          >
+            <Marker position={{ lat: Number(latitude), lng: Number(longitude) }} />
+            { markers.length && markers.map(({ lat, lng }, index) => {
+              return <Marker key={index} position={{ lat: Number(lat), lng: Number(lng) }} />
+            })}
+          </GoogleMap>
+        )}
       </div>
     );
   }

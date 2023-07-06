@@ -45,7 +45,7 @@ function App() {
             exact
             path="/followed"
             render={() => (
-              <LocationsPage
+              <LocationsFollowed
                 message="No results found. Adjust the search keyword or follow a user."
                 filter={'followers.filter((follower) => follower.is_following === true)'}
               />
