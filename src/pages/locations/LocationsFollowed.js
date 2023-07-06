@@ -1,107 +1,94 @@
 import React, { useEffect, useState } from "react";
-
-import Form from "react-bootstrap/Form";
+import { useLocation } from "react-router";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
-import Avatar from "../../comonents/Avatar";
-import Location from "./Location";
-import Asset from "../../comonents/Asset";
-import { Link } from "react-router-dom";
-import { useParams } from "react-router";
-import appStyles from "../../App.module.css";
-import styles from "../../styles/PostsPage.module.css";
-import { useLocation } from "react-router";
-import { axiosReq } from "../../api/axiosDefaults";
-import Post from "../posts/Post";
 import NoResults from "../../assets/no-results.png";
+import appStyles from "../../App.module.css";
+import { useParams } from "react-router";
+import { axiosReq } from "../../api/axiosDefaults";
+import Location from "./Location"
+import Post from "../posts/Post"
 import InfiniteScroll from "react-infinite-scroll-component";
+import Asset from "../../comonents/Asset";
 import { fetchMoreData } from "../../utils/utils";
+import { useSetProfileData } from "../../contexts/ProfileDataContext";
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
 
-function LocationsFollowed({ message, filter = "" }) {
-  const [location, setLocations] = useState({ results: [] });
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const [locationPosts, setLocationPosts] = useState({ results: [] });
+
+function LocationsFollowed(message, filter = "" ) {
+  const {id} = useParams();
+  const [location, setLocation] = useState({ results: [] });
+  const [posts, setPosts] = useState({ results: [] });
+  const [relatedPosts, setRelatedPosts] = useState({ results: [] });
+  const [followers, setFollowers] = useState({ results: [] });
   const { pathname } = useLocation();
-    const { id } = useParams();
+  const [hasLoaded, setHasLoaded] = useState(false);
   const [query, setQuery] = useState("");
-  
+  const [filteredPosts, setFilteredPosts] = useState([]);
+  const [filteredFollowers, setFilteredFollowers] = useState([]);
+  const {handleFollowLocation, handleUnfollowLocation } = useSetProfileData();
+  const currentUser = useCurrentUser();
+  const followedNames = filteredFollowers.filter((followers) => followers.owner === currentUser.username)
+  const filteredId = followedNames.map(following_id => following_id.id);
+
+
   useEffect(() => {
-    const fetchLocations = async () => {
+    const fetchData = async () => {
       try {
-        
-        const { data } = await axiosReq.get(`/locations/`);
-        setLocations(data);
-        setHasLoaded(true);
+        const [
+          { data: locationData },
+          { data: postsData },
+          { data: followData }
+        ] = await Promise.all([
+          axiosReq.get(`/locations/`),
+          axiosReq.get(`/posts/`),
+          axiosReq.get(`/follow/`),
+        ]);
+  
+        const locationResults = [locationData];
+        setLocation({ results: locationResults });
+  
+        const postNames = postsData.results.map((post) => post);
+        setRelatedPosts({ results: postNames });
+  
+        const locationFollowers = followData.results.map((follower) => follower);
+        setFollowers({ results: locationFollowers });
+  
+        const filteredPosts = postNames.filter((relatedPost) =>
+          relatedPost.name === locationResults[0]?.name
+        );
+        setFilteredPosts(filteredPosts);
+  
+        const filteredFollowers = locationFollowers.filter(
+          (follower) => follower.follow_location === locationResults[0]?.name
+        );
+        setFilteredFollowers(filteredFollowers);
+        console.log(followData)
       } catch (err) {
         console.log(err);
       }
     };
-
-    setHasLoaded(false);
-    const timer = setTimeout(() => {
-      fetchLocations();
-      const filteredLocations = location.filter((loc) => loc.is_following === true);
-
-    console.log(filteredLocations)
-    }, 1000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [filter, query, pathname]);
-
+    
+    fetchData();
+  }, [id, handleFollowLocation, handleUnfollowLocation]);
   
 
-  return (
-    <Row className="h-100">
-      <Col className="py-2 p-0 p-lg-2" lg={8}>
-        <p>Popular profiles mobile</p>
-        <i className={`fas fa-search ${styles.SearchIcon}`} />
-        <Form
-          className={styles.SearchBar}
-          onSubmit={(event) => event.preventDefault()}
-        >
-          <Form.Control
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            type="text"
-            className="mr-sm-2"
-            placeholder="Search posts"
-          />
-        </Form>
+  const backgroundImageStyle = {
+      backgroundImage: `url(${location.results[0]?.image_url})`,
+      backgroundSize: "cover",
+      backgroundPosition: "center center",
+      backgroundRepeat: "no-repeat",
+      height: "400px",
+      width: "100%",
+      border: "12px solid transparent",
+      marginBottom: "12px"
+    };
+    
 
-        {hasLoaded ? (
-          <>
-            {location.results.length ? (
-              <InfiniteScroll
-                children={location.results.map((location) => (
-                    <Link to={`/locations/${location.id}`} key={location.id}>
-                        <Location key={location.id} {...location} setloctions={setLocations} />
-                    </Link>  
-                ))}
-                dataLength={location.results.length}
-                loader={<Asset spinner />}
-                hasMore={!!location.next}
-                next={() => fetchMoreData(location, setLocations)}
-              />
-            ) : (
-              <Container className={appStyles.Content}>
-                <Asset src={NoResults} message={message} />
-              </Container>
-            )}
-          </>
-        ) : (
-          <Container className={appStyles.Content}>
-            <Asset spinner />
-          </Container>
-        )}
-      </Col>
-      <Col md={4} className="d-none d-lg-block p-0 p-lg-2">
-        <p>Popular profiles for desktop</p>
-      </Col>
-    </Row>
+  return (
+    <div>hy</div>
   );
 }
-
-export default LocationsFollowed;
+  
+  export default LocationsFollowed;

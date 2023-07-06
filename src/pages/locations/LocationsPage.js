@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-
+import Map from "../../api/mapLocation";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -17,16 +17,33 @@ import Post from "../posts/Post";
 import NoResults from "../../assets/no-results.png";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { fetchMoreData } from "../../utils/utils";
+import MyMapApp from "../../api/mapLocation"
+
+
 
 function LocationsPage({ message, filter = "" }) {
   const [location, setLocations] = useState({ results: [] });
   const [hasLoaded, setHasLoaded] = useState(false);
   const [locationPosts, setLocationPosts] = useState({ results: [] });
+  const [latitude, setLatitude] = useState();
+  const [longitude, setLongitude] = useState();
   const { pathname } = useLocation();
    const { id } = useParams();
-
   const [query, setQuery] = useState("");
-  console.log(location)
+
+  // navigator.geolocation.getCurrentPosition(function(position) {
+  //   setLatitude(position.coords.latitude);
+  //   setLongitude(position.coords.longitude);
+  // });
+
+  // console.log(latitude)
+  // console.log(longitude)
+  
+
+  
+
+
+  
   useEffect(() => {
     const fetchLocations = async () => {
       try {
@@ -42,6 +59,7 @@ function LocationsPage({ message, filter = "" }) {
     setHasLoaded(false);
     const timer = setTimeout(() => {
       fetchLocations();
+      
     }, 1000);
 
     return () => {
@@ -54,8 +72,7 @@ function LocationsPage({ message, filter = "" }) {
   return (
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
-        <p>Popular profiles mobile</p>
-        <i className={`fas fa-search ${styles.SearchIcon}`} />
+        <MyMapApp />
         <Form
           className={styles.SearchBar}
           onSubmit={(event) => event.preventDefault()}

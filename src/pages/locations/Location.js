@@ -31,7 +31,7 @@ const Location= (props) => {
   const currentUser = useCurrentUser();
   const {handleFollowLocation, handleUnfollowLocation } = useSetProfileData();
  
-
+  console.log(currentUser)
   return (
     <Card className={styles.Post}>
       <Card.Body >

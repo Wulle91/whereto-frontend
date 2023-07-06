@@ -29,3 +29,13 @@
   .Inline :nth-child(2) {
     width: 100%;
   }
+
+  .App {
+    height: 100vh;
+    width: 100vw;
+  }
+  
+  .map-container {
+    height: 100%;
+    width: 100%;
+  }
