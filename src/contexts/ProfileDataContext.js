@@ -19,7 +19,6 @@ export const ProfileDataProvider = ({ children }) => {
   });
 
   const currentUser = useCurrentUser();
-
   const handleFollow = async (clickedProfile) => {
     try {
       const { data } = await axiosRes.post("/followers/", {
@@ -78,15 +77,21 @@ export const ProfileDataProvider = ({ children }) => {
 
   const handleUnfollowLocation = async (clickedLocation) => {
     try {
-      await axiosRes.delete(`/follow/${clickedLocation.following_id}/`);
-
+      await axiosRes.delete(`/follow/${clickedLocation.filteredId}/`);
+  
       setProfileData((prevState) => ({
         ...prevState,
         popularLocations: {
           ...prevState.popularLocations,
-          results: prevState.popularLocations.results.map((location) =>
-            unfollowLocationHelper(location, clickedLocation)
-          ),
+          results: prevState.popularLocations.results.map((location) => {
+            if (location.id === clickedLocation.id) {
+              return {
+                ...location,
+                following_id: null,
+              };
+            }
+            return location;
+          }),
         },
       }));
     } catch (err) {

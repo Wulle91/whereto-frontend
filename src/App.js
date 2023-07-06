@@ -17,7 +17,7 @@ import ProfilePage from "./pages/profiles/ProfilePage";
 import UsernameForm from "./pages/profiles/UsernameForm";
 import UserPasswordForm from "./pages/profiles/UserPasswordForm";
 import ProfileEditForm from "./pages/profiles/ProfileEditForm";
-
+import LocationsFollowed from "./pages/locations/LocationsFollowed";
 
 
 function App() {
@@ -44,9 +44,8 @@ function App() {
             exact
             path="/followed"
             render={() => (
-              <PostsPage
+              <LocationsFollowed
                 message="No results found. Adjust the search keyword or follow a user."
-                filter={`owner__followed__owner__profile=${profile_id}&`}
               />
             )}
           />

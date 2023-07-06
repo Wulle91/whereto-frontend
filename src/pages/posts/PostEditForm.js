@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 import Alert from "react-bootstrap/Alert";
 import Image from "react-bootstrap/Image";
-
+import AutoComplete from "../../api/autoComplete";
 import styles from "../../styles/PostCreateEditForm.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
@@ -22,8 +22,11 @@ function PostEditForm() {
     title: "",
     content: "",
     image: "",
-  });
-  const { title, content, image } = postData;
+    location_image: "",
+    location_name: "",
+    location_address: "",
+});
+  const { title, location_name, content, image, location_image, location_address } = postData;
 
   const imageInput = useRef(null);
   const history = useHistory();
@@ -33,9 +36,9 @@ function PostEditForm() {
     const handleMount = async () => {
       try {
         const { data } = await axiosReq.get(`/posts/${id}/`);
-        const { title, content, image, is_owner } = data;
+        const { title, location_name, content, image, location_image, location_address, is_owner } = data;
 
-        is_owner ? setPostData({ title, content, image }) : history.push("/");
+        is_owner ? setPostData({ title, content, image, location_name, location_image, location_address }) : history.push("/");
       } catch (err) {
         console.log(err);
       }
@@ -61,12 +64,26 @@ function PostEditForm() {
     }
   };
 
+  const handleLocationChange = (location, photo, address) => {
+    setPostData({
+        ...postData,
+        location_name: location,
+        location_image: photo,
+        location_address: address  // Update the location state with the selected place name
+    });
+};
+
+
   const handleSubmit = async (event) => {
     event.preventDefault();
     const formData = new FormData();
 
-    formData.append("title", title);
-    formData.append("content", content);
+      formData.append('title', title)
+      formData.append('name', location_name)
+      formData.append('content', content)
+      formData.append('image', imageInput.current.files[0])
+      formData.append('image_url', location_image)
+      formData.append('address', location_address)
 
     if (imageInput?.current?.files[0]) {
       formData.append("image", imageInput.current.files[0]);
@@ -98,6 +115,18 @@ function PostEditForm() {
         <Alert variant="warning" key={idx}>
           {message}
         </Alert>
+      ))}
+      <Form.Group>
+          <AutoComplete
+              type="text"
+              name="location"
+              value={location_name}
+              onChange={handleLocationChange} />
+      </Form.Group>
+      {errors?.title?.map((message, idx) => (
+          <Alert variant="warning" key={idx}>
+              {message}
+          </Alert>
       ))}
 
       <Form.Group>

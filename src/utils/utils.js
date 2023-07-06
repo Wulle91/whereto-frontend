@@ -56,7 +56,7 @@ export const unfollowLocationHelper = (location, clickedLocation) => {
     ? {
         ...location,
         followers_count: location.followers_count - 1,
-        following_id: null,
+        is_following: null,
       }
     : location
     ?{ ...location, following_count: location.following_count - 1 }

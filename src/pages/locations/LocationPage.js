@@ -12,6 +12,9 @@ import Post from "../posts/Post"
 import InfiniteScroll from "react-infinite-scroll-component";
 import Asset from "../../comonents/Asset";
 import { fetchMoreData } from "../../utils/utils";
+import { useSetProfileData } from "../../contexts/ProfileDataContext";
+import { useCurrentUser } from "../../contexts/CurrentUserContext";
+
 
 function LocationPage(message, filter = "" ) {
   const {id} = useParams();
@@ -24,63 +27,52 @@ function LocationPage(message, filter = "" ) {
   const [query, setQuery] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [filteredFollowers, setFilteredFollowers] = useState([]);
+  const {handleFollowLocation, handleUnfollowLocation } = useSetProfileData();
+  const currentUser = useCurrentUser();
+ 
 
  
-  console.log(filteredFollowers)
+  const followedNames = filteredFollowers.filter((followers) => followers.owner === currentUser.username)
+  const filteredId = followedNames.map(following_id => following_id.id);
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [{ data: locationData }, { data: postsData }, { data: followData }] = await Promise.all([
+        const [
+          { data: locationData },
+          { data: postsData },
+          { data: followData }
+        ] = await Promise.all([
           axiosReq.get(`/locations/${id}`),
           axiosReq.get(`/posts/`),
           axiosReq.get(`/follow/`),
         ]);
-        setLocation({ results: [locationData] });
+  
+        const locationResults = [locationData];
+        setLocation({ results: locationResults });
+  
         const postNames = postsData.results.map((post) => post);
         setRelatedPosts({ results: postNames });
-        const location_followers = followData.results.map((follower) => follower)
-        setFollowers({ results: [location_followers] })
+  
+        const locationFollowers = followData.results.map((follower) => follower);
+        setFollowers({ results: locationFollowers });
+  
+        const filteredPosts = postNames.filter((relatedPost) =>
+          relatedPost.name === locationResults[0]?.name
+        );
+        setFilteredPosts(filteredPosts);
+  
+        const filteredFollowers = locationFollowers.filter(
+          (follower) => follower.follow_location === locationResults[0]?.name
+        );
+        setFilteredFollowers(filteredFollowers);
       } catch (err) {
         console.log(err);
       }
     };
-    
+    console.log(followers)
     fetchData();
-    
-  }, [id]);
-  console.log(filteredFollowers[0])
-  useEffect(() => {
-      const filtered = relatedPosts.results.map((relatedPost) => ({ ...relatedPost }))
-        .filter((relatedPost) => relatedPost.name === location.results[0]?.name);
-      setFilteredPosts(filtered);
-      const filterd_followers = followers.results.map((filterd_follower) => filterd_follower
-        .filter((filterd_follower) => filterd_follower.follow_location === location.results[0]?.name));
-      setFilteredFollowers(filterd_followers)
-    
-  }, [location, posts]);
- 
-  useEffect(() => {
-    const handleMount = async () => {
-      try {
-        const [{ data: location }] = await Promise.all([
-          axiosReq.get(`/locations/${id}`)
-        ])
-        setLocation({results: [location]})
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
-    setHasLoaded(false);
-    const timer = setTimeout(() => {
-      fetchPosts();
-    }, 1000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-    handleMount()
-  }, [id]);
+  }, [id, handleFollowLocation, handleUnfollowLocation]);
+  
 
   const backgroundImageStyle = {
       backgroundImage: `url(${location.results[0]?.image_url})`,
@@ -107,6 +99,7 @@ function LocationPage(message, filter = "" ) {
               LocationPage
               filteredPosts={filteredPosts}
               filteredFollowers={filteredFollowers}
+              filteredId={filteredId}
             />
         {filteredPosts.length ? (
             <InfiniteScroll

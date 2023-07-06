@@ -18,15 +18,14 @@ import NoResults from "../../assets/no-results.png";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { fetchMoreData } from "../../utils/utils";
 
-function LocationsPage({ message, filter = "" }) {
+function LocationsFollowed({ message, filter = "" }) {
   const [location, setLocations] = useState({ results: [] });
   const [hasLoaded, setHasLoaded] = useState(false);
   const [locationPosts, setLocationPosts] = useState({ results: [] });
   const { pathname } = useLocation();
-   const { id } = useParams();
-
+    const { id } = useParams();
   const [query, setQuery] = useState("");
-  console.log(location)
+  
   useEffect(() => {
     const fetchLocations = async () => {
       try {
@@ -42,6 +41,9 @@ function LocationsPage({ message, filter = "" }) {
     setHasLoaded(false);
     const timer = setTimeout(() => {
       fetchLocations();
+      const filteredLocations = location.filter((loc) => loc.is_following === true);
+
+    console.log(filteredLocations)
     }, 1000);
 
     return () => {
@@ -102,4 +104,4 @@ function LocationsPage({ message, filter = "" }) {
   );
 }
 
-export default LocationsPage;
+export default LocationsFollowed;

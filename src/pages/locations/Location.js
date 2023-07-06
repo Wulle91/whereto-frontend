@@ -12,6 +12,7 @@ import Row from "react-bootstrap/Row";
 
 import { axiosRes } from "../../api/axiosDefaults";
 import { useSetProfileData } from "../../contexts/ProfileDataContext";
+import { useState } from "react";
 
 const Location= (props) => {
   const {
@@ -22,13 +23,15 @@ const Location= (props) => {
     mobile,
     following_id,
     filteredFollowers,
-    followers_count,
+    is_following,
     filteredPosts,
+    filteredId,
   } = props;
   
   const currentUser = useCurrentUser();
   const {handleFollowLocation, handleUnfollowLocation } = useSetProfileData();
-  console.log(filteredFollowers)
+ 
+
   return (
     <Card className={styles.Post}>
       <Card.Body >
@@ -50,19 +53,20 @@ const Location= (props) => {
           </Row>
         )}
         <div className={`text-right ${!mobile && "ml-auto"}`}>
-          {following_id ? (
-            <div>{filteredFollowers[0].length}
+          {is_following ? (
+            
             <Button
               className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
               onClick={() => {handleUnfollowLocation(props)}}
             >
               unfollow
-            </Button></div>
+            </Button>
           ) : (
             <Button
               className={`${btnStyles.Button} ${btnStyles.Black}`}
               onClick={() => {handleFollowLocation(props)}}
             >
+              
               follow
             </Button>
           )}

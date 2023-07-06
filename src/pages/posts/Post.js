@@ -76,13 +76,6 @@ const Post = (props) => {
     }
   };
 
-  // const backgroundImageStyle = {
-  //   backgroundImage: `url(${image})`,
-  //   backgroundSize: "cover",
-  //   backgroundPosition: "center",
-  //   backgroundRepeat: "no-repeat",
-  //   height: "300px",
-  // };
 
   return (
     <Card className={styles.Post}>

@@ -58,7 +58,6 @@ function PostCreateForm() {
             location_image: photo,
             location_address: address  // Update the location state with the selected place name
         });
-        console.log(photo)
     };
 
 
