@@ -106,7 +106,7 @@ const Post = (props) => {
       <Card.Body>
         {location && <Card.Text>{location}</Card.Text>}
         {title && <Card.Title className="text-center">{title}</Card.Title>}
-        {/* {name && <Card.Title className="text-center">{name}</Card.Title>} */}
+        {name && <Card.Title className="text-center">{name}</Card.Title>}
         {content && <Card.Text>{content}</Card.Text>}
         <div className={styles.PostBar}>
           {is_owner ? (

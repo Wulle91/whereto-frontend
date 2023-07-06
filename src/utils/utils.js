@@ -14,3 +14,51 @@ export const fetchMoreData = async (resource, setResource) => {
     }));
   } catch (err) {}
 };
+
+export const followHelper = (profile, clickedProfile, following_id) => {
+  return profile.id === clickedProfile.id
+    ? {
+        ...profile,
+        followers_count: profile.followers_count + 1,
+        following_id,
+      }
+    : profile.is_owner
+    ? { ...profile, following_count: profile.following_count + 1 }
+    : profile;
+};
+
+export const followLocationHelper = (location, clickedLocation, following_id) => {
+  return location.id === clickedLocation.id
+    ? {
+        ...location,
+        followers_count: location.followers_count + 1,
+        following_id,
+      }
+    : location
+    ? { ...location, following_count: location.following_count + 1 }
+    : location;
+};
+
+export const unfollowHelper = (profile, clickedProfile) => {
+  return profile.id === clickedProfile.id
+    ? {
+        ...profile,
+        followers_count: profile.followers_count - 1,
+        following_id: null,
+      }
+    : profile.is_owner
+    ? { ...profile, following_count: profile.following_count - 1 }
+    :profile;
+};
+
+export const unfollowLocationHelper = (location, clickedLocation) => {
+  return location.id === clickedLocation.id
+    ? {
+        ...location,
+        followers_count: location.followers_count - 1,
+        following_id: null,
+      }
+    : location
+    ?{ ...location, following_count: location.following_count - 1 }
+    : location;
+};

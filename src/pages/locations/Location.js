@@ -6,9 +6,12 @@ import { Link } from "react-router-dom";
 import Avatar from "../../comonents/Avatar";
 import { Button } from "react-bootstrap";
 import btnStyles from "../../styles/Button.module.css";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 
 import { axiosRes } from "../../api/axiosDefaults";
+import { useSetProfileData } from "../../contexts/ProfileDataContext";
 
 const Location= (props) => {
   const {
@@ -18,51 +21,14 @@ const Location= (props) => {
     image_url,
     mobile,
     following_id,
-    comments_count,
-    likes_count,
-    like_id,
-    title,
-    content,
-    image,
-    updated_at,
-    postPage,
-    setPosts,
+    filteredFollowers,
+    followers_count,
+    filteredPosts,
   } = props;
-
+  
   const currentUser = useCurrentUser();
-
-//   const handleLike = async () => {
-//     try {
-//       const { data } = await axiosRes.post("/likes/", { post: id });
-//       setPosts((prevPosts) => ({
-//         ...prevPosts,
-//         results: prevPosts.results.map((post) => {
-//           return post.id === id
-//             ? { ...post, likes_count: post.likes_count + 1, like_id: data.id }
-//             : post;
-//         }),
-//       }));
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-
-//   const handleUnlike = async () => {
-//     try {
-//       await axiosRes.delete(`/likes/${like_id}/`);
-//       setPosts((prevPosts) => ({
-//         ...prevPosts,
-//         results: prevPosts.results.map((post) => {
-//           return post.id === id
-//             ? { ...post, likes_count: post.likes_count - 1, like_id: null }
-//             : post;
-//         }),
-//       }));
-//     } catch (err) {
-//       console.log(err);
-//     }
-//   };
-
+  const {handleFollowLocation, handleUnfollowLocation } = useSetProfileData();
+  console.log(filteredFollowers)
   return (
     <Card className={styles.Post}>
       <Card.Body >
@@ -71,18 +37,31 @@ const Location= (props) => {
           </Link>
         {name && <Card.Title className="text-center">{name}</Card.Title>}
         {address && <Card.Text>{address}</Card.Text>}
+        {filteredPosts && (
+          <Row className="justify-content-center no-gutters">
+            <Col xs={3} className="my-2">
+              <div>{filteredPosts.length}</div>
+              <div>posts</div>
+            </Col>
+            <Col xs={3} className="my-2">
+              <div>{filteredFollowers.length}</div>
+              <div>followers</div>
+            </Col>
+          </Row>
+        )}
         <div className={`text-right ${!mobile && "ml-auto"}`}>
           {following_id ? (
+            <div>{filteredFollowers[0].length}
             <Button
               className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
-              onClick={() => {}}
+              onClick={() => {handleUnfollowLocation(props)}}
             >
               unfollow
-            </Button>
+            </Button></div>
           ) : (
             <Button
               className={`${btnStyles.Button} ${btnStyles.Black}`}
-              onClick={() => {}}
+              onClick={() => {handleFollowLocation(props)}}
             >
               follow
             </Button>

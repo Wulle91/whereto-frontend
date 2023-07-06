@@ -18,27 +18,28 @@ function LocationPage(message, filter = "" ) {
   const [location, setLocation] = useState({ results: [] });
   const [posts, setPosts] = useState({ results: [] });
   const [relatedPosts, setRelatedPosts] = useState({ results: [] });
+  const [followers, setFollowers] = useState({ results: [] });
   const { pathname } = useLocation();
   const [hasLoaded, setHasLoaded] = useState(false);
   const [query, setQuery] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
+  const [filteredFollowers, setFilteredFollowers] = useState([]);
 
  
-
+  console.log(filteredFollowers)
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [{ data: locationData }, { data: postsData }] = await Promise.all([
+        const [{ data: locationData }, { data: postsData }, { data: followData }] = await Promise.all([
           axiosReq.get(`/locations/${id}`),
-          axiosReq.get(`/posts/`)
+          axiosReq.get(`/posts/`),
+          axiosReq.get(`/follow/`),
         ]);
         setLocation({ results: [locationData] });
         const postNames = postsData.results.map((post) => post);
-        console.log(postNames)
-        setRelatedPosts({ results: postNames })
-        
-      
-        console.log(relatedPosts)
+        setRelatedPosts({ results: postNames });
+        const location_followers = followData.results.map((follower) => follower)
+        setFollowers({ results: [location_followers] })
       } catch (err) {
         console.log(err);
       }
@@ -47,18 +48,17 @@ function LocationPage(message, filter = "" ) {
     fetchData();
     
   }, [id]);
-
-  console.log(relatedPosts)
+  console.log(filteredFollowers[0])
   useEffect(() => {
-  
-      const filtered = relatedPosts.results.map((relatedPost) => ({ ...relatedPost })) // Create a shallow copy of each post object
+      const filtered = relatedPosts.results.map((relatedPost) => ({ ...relatedPost }))
         .filter((relatedPost) => relatedPost.name === location.results[0]?.name);
-      console.log(filtered)
       setFilteredPosts(filtered);
-      
+      const filterd_followers = followers.results.map((filterd_follower) => filterd_follower
+        .filter((filterd_follower) => filterd_follower.follow_location === location.results[0]?.name));
+      setFilteredFollowers(filterd_followers)
     
   }, [location, posts]);
-
+ 
   useEffect(() => {
     const handleMount = async () => {
       try {
@@ -66,20 +66,19 @@ function LocationPage(message, filter = "" ) {
           axiosReq.get(`/locations/${id}`)
         ])
         setLocation({results: [location]})
-        console.log(location.name)
       } catch (err) {
         console.log(err);
       }
     };
 
-    // setHasLoaded(false);
-    // const timer = setTimeout(() => {
-    //   fetchPosts();
-    // }, 1000);
+    setHasLoaded(false);
+    const timer = setTimeout(() => {
+      fetchPosts();
+    }, 1000);
 
-    // return () => {
-    //   clearTimeout(timer);
-    // };
+    return () => {
+      clearTimeout(timer);
+    };
     handleMount()
   }, [id]);
 
@@ -106,6 +105,8 @@ function LocationPage(message, filter = "" ) {
               {...location.results[0]}
               setLocations={setLocation}
               LocationPage
+              filteredPosts={filteredPosts}
+              filteredFollowers={filteredFollowers}
             />
         {filteredPosts.length ? (
             <InfiniteScroll

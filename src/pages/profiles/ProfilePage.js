@@ -23,13 +23,14 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Post from "../posts/Post";
 import { fetchMoreData } from "../../utils/utils";
 import NoResults from "../../assets/no-results.png";
+import { ProfileEditDropdown } from "../../comonents/MoreDropdown";
 
 function ProfilePage() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [profilePosts, setProfilePosts] = useState({ results: [] });
   const currentUser = useCurrentUser();
   const { id } = useParams();
-  const setProfileData = useSetProfileData();
+  const { setProfileData, handleFollow, handleUnfollow  } = useSetProfileData();
   const { pageProfile } = useProfileData();
   const [profile] = pageProfile.results;
   const is_owner = currentUser?.username === profile?.owner;
@@ -56,7 +57,9 @@ function ProfilePage() {
 
   const mainProfile = (
     <>
+    
       <Row noGutters className="px-3 text-center">
+      {profile?.is_owner && <ProfileEditDropdown id={profile?.id} />}
         <Col lg={3} className="text-lg-left">
           <Image
             className={styles.ProfileImage}
@@ -87,14 +90,14 @@ function ProfilePage() {
             (profile?.following_id ? (
               <Button
                 className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
-                onClick={() => {}}
+                onClick={() => {handleUnfollow(profile) }}
               >
                 unfollow
               </Button>
             ) : (
               <Button
                 className={`${btnStyles.Button} ${btnStyles.Black}`}
-                onClick={() => {}}
+                onClick={() => {handleFollow(profile)}}
               >
                 follow
               </Button>

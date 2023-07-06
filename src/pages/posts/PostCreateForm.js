@@ -7,7 +7,7 @@ import Col from "react-bootstrap/Col";
 import Container from "react-bootstrap/Container";
 
 import Upload from "../../assets/arrow-upload-icon.png";
-
+import { useRedirect } from "../../hooks/useRedirect";
 import styles from "../../styles/PostCreateEditForm.module.css";
 import appStyles from "../../App.module.css";
 import btnStyles from "../../styles/Button.module.css";
@@ -18,7 +18,7 @@ import { useHistory } from "react-router-dom";
 import { axiosReq } from "../../api/axiosDefaults";
 
 function PostCreateForm() {
-
+    useRedirect("loggedOut");
     const [errors, setErrors] = useState({});
 
     const [postData, setPostData] = useState({
