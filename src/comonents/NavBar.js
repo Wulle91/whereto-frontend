@@ -58,13 +58,6 @@ const NavBar = () => {
           height={40}/>
             <span className={styles.Hide}>Profile</span>
     </NavLink>
-    <NavLink 
-      className={styles.NavLink} 
-      activeClassName={styles.Active} 
-      to="/" onClick={handleSignOut}>
-        <i className="fas fa-search-location"></i>
-        <span className={styles.Hide}>Sign out</span>
-    </NavLink>
   </>)
   const loggedOutIcons = (<>
     <NavLink 
@@ -85,12 +78,12 @@ const NavBar = () => {
 
   return (
     <Navbar className={styles.NavBar} bg="light" variant="light">
-        <Container>
+        <Container className={styles.Space}>
             <NavLink to="/">
                 <Navbar.Brand><img src={logo} alt='logo' height="45"/></Navbar.Brand>
             </NavLink>
-            <Nav className="me-auto">
-                <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/"><i className='fas fa-home'></i><span className='hide-small'>Home</span></NavLink>
+            <Nav className={`me-auto ${styles.Space}`}>
+                <NavLink className={styles.NavLink} activeClassName={styles.Active} to="/"><i className='fas fa-home'></i><span className={styles.Hide}>Home</span></NavLink>
                 {currentUser ? loggedInIcons : loggedOutIcons}
             </Nav>
         </Container>

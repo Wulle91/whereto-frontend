@@ -43,8 +43,8 @@ const PopularLocations = ({ mobile }) => {
                         <div className="d-flex justify-content-around">
                             {popularLocations.results.slice(0, 4).map((location) => (
                                 <p key={location.id}><Link className="align-self-center" to={`/locations/${location.id}`}>
-                                                        <Avatar src={location.image_url} height={45} />
-                                                    </Link>{location.name}</p>
+                                                        <Avatar src={location.image_url} height={75} />
+                                                    </Link></p>
                             ))}
                         </div>
 

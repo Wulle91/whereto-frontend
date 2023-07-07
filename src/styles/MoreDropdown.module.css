@@ -9,3 +9,11 @@
   right: 0;
   z-index: 99;
 }
+.Custom {
+  position: absolute;
+  right: 10px;
+}
+
+.Drop a {
+  text-align: center;
+}

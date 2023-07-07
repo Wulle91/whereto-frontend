@@ -3,3 +3,7 @@
     margin: 0px 8px 0px 8px;
     object-fit: cover;
   }
+
+.Avatar :hover {
+  border: 2px solid orangered;
+}

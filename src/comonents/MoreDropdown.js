@@ -2,9 +2,9 @@ import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import styles from "../styles/MoreDropdown.module.css";
 import { useHistory } from "react-router";
-
-
-
+import { useCurrentUser, useSetCurrentUser } from "../contexts/CurrentUserContext";
+import Avatar from "./Avatar";
+import axios from 'axios';
 
 const ThreeDots = React.forwardRef(({ onClick }, ref) => (
   <i
@@ -19,13 +19,10 @@ const ThreeDots = React.forwardRef(({ onClick }, ref) => (
 
 export const MoreDropdown = ({ handleEdit, handleDelete }) => {
   return (
-    <Dropdown className="ml-auto" drop="left">
+    <Dropdown className={`ml-auto ${styles.Custom}`} drop="left">
       <Dropdown.Toggle as={ThreeDots} />
 
-      <Dropdown.Menu
-        className={styles.Drop}
-        popperConfig={{ strategy: "fixed" }}
-      >
+      <Dropdown.Menu className={styles.Drop} popperConfig={{ strategy: "fixed" }}>
         <Dropdown.Item
           className={styles.DropdownItem}
           onClick={handleEdit}
@@ -47,6 +44,19 @@ export const MoreDropdown = ({ handleEdit, handleDelete }) => {
 
 export function ProfileEditDropdown({ id }) {
   const history = useHistory();
+  const currentUser = useCurrentUser();
+  const setCurrentUser = useSetCurrentUser();
+
+  const handleSignOut = async () => {
+    try {
+      await axios.post('/dj-rest-auth/logout/');
+      setCurrentUser(null);
+      history.push('/')
+    } catch (err) {
+      console.log(err)
+    }
+  };
+
   return (
     <Dropdown className={`ml-auto px-3 ${styles.Absolute}`} drop="left">
       <Dropdown.Toggle as={ThreeDots} />
@@ -71,17 +81,15 @@ export function ProfileEditDropdown({ id }) {
           <i className="fas fa-key" />
           change password
         </Dropdown.Item>
-        {/* <Dropdown.Item
-          className={styles.NavLink} 
-          activeClassName={styles.Active} 
-          to="/" onClick={handleSignOut}>
-            <i className="fas fa-search-location"></i>
-            <span className={styles.Hide}>Sign out</span>    
-        </Dropdown.Item> */}
+        <Dropdown.Item
+          className={styles.NavLink}
+          activeClassName={styles.Active}
+          onClick={handleSignOut}
+        >
+          <i className="fas fa-search-location"></i>
+          <span className={styles.Hide}>Sign out</span>
+        </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );
 }
-
-
-      

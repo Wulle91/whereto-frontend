@@ -31,3 +31,7 @@
     display: flex;
     align-items: center;
   }
+
+  .Custom {
+    margin-right: 25px;
+  }

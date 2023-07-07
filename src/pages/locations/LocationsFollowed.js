@@ -16,7 +16,8 @@ import { useSetProfileData } from "../../contexts/ProfileDataContext";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Link } from "react-router-dom";
 import btnStyles from "../../styles/Button.module.css";
-
+import { Button } from "react-bootstrap";
+import PopularLocations from "./PopularLocations";
 
 
 function LocationsFollowed({ message }) {
@@ -28,6 +29,7 @@ function LocationsFollowed({ message }) {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [showSpinner, setShowSpinner] = useState(true);
   const { handleFollowLocation, handleUnfollowLocation } = useSetProfileData();
+  const [showButton, useShowwButton] = useState(true)
 
   const fetchData = async () => {
     try {
@@ -75,6 +77,7 @@ function LocationsFollowed({ message }) {
   return (
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
+      <PopularLocations mobile />
         {myLocations && !hasLoaded ? (
           <>
             {myLocations.length ? (
@@ -84,12 +87,11 @@ function LocationsFollowed({ message }) {
                     key={location.id}
                     {...location}
                     setMyLocations={setLocation}
-                    handleUnfollowLocation={handleUnfollowLocation}
+                    showButton={false}
                   >
                     <Link to={`/locations/${location.id}`}>
                       <img src={location.imageUrl} alt={location.name} />
                     </Link>
-                    
                   </Location>
                 ))}
                 dataLength={myLocations.length}
@@ -114,7 +116,7 @@ function LocationsFollowed({ message }) {
         )}
       </Col>
       <Col md={4} className="d-none d-lg-block p-0 p-lg-2">
-        <p>Popular profiles for desktop</p>
+      <PopularLocations />
       </Col>
     </Row>
   );
