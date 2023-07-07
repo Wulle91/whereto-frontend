@@ -81,7 +81,7 @@ function LocationsPage({ message, filter = "" }) {
             placeholder="Search posts"
           />
         </Form>
-
+        
         {hasLoaded ? (
           <>
             {location.results.length ? (

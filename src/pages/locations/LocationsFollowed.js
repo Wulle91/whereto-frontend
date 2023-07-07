@@ -15,97 +15,95 @@ import { fetchMoreData } from "../../utils/utils";
 import { useSetProfileData } from "../../contexts/ProfileDataContext";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Link } from "react-router-dom";
+import btnStyles from "../../styles/Button.module.css";
 
 
-function LocationsFollowed(message, filter = "") {
+
+function LocationsFollowed({ message }) {
+  const currentUser = useCurrentUser();
   const { id } = useParams();
-  const [location, setLocation] = useState({ results: [] });
-  const [allLocations, setAllLocation] = useState();
-  const [posts, setPosts] = useState({ results: [] });
-  const [relatedPosts, setRelatedPosts] = useState({ results: [] });
-  const [followers, setFollowers] = useState({ results: [] });
+  const [location, setLocation] = useState();
+  const [myLocations, setMyLocations] = useState();
   const { pathname } = useLocation();
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [query, setQuery] = useState("");
-  const [filteredPosts, setFilteredPosts] = useState([]);
-  const [filtFollowers, setFiltFollowers] = useState([]);
-  const [currentUserFollowedLocations, setCurrentUserFollowedLocations] = useState([]);
+  const [showSpinner, setShowSpinner] = useState(true);
   const { handleFollowLocation, handleUnfollowLocation } = useSetProfileData();
-  const currentUser = useCurrentUser();
-  const followedNames = filtFollowers.filter((followers) => followers.owner === currentUser.username)
-  const filteredId = followedNames.map(following_id => following_id.id);
 
+  const fetchData = async () => {
+    try {
+      const [
+        { data: locationData },
+        { data: postsData },
+        { data: followData },
+      ] = await Promise.all([
+        axiosReq.get(`/locations/`),
+        axiosReq.get(`/posts/`),
+        axiosReq.get(`/follow/`),
+      ]);
+      setHasLoaded(true);
+      const locationResults = [locationData];
+      setLocation(locationData);
+      const postNames = postsData.results.map((post) => post);
+      const locationFollowers = followData.results.map((follower) => follower);
+      setMyLocations(
+        locationData.results.filter((loc) =>
+          followData.results
+            .filter((follower) => follower.owner === currentUser?.username)
+            .some((follower) => follower.follow_location === loc.name)
+        )
+      );
+      setHasLoaded(false);
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [
-          { data: locationData },
-          { data: postsData },
-          { data: followData }
-        ] = await Promise.all([
-          axiosReq.get(`/locations/`),
-          axiosReq.get(`/posts/`),
-          axiosReq.get(`/follow/`),
-        ]);
-
-        const locationResults = [locationData];
-        setLocation({ results: locationResults });
-        const locationsList = locationData.results.map((loc) => loc)
-        setAllLocation(locationsList)
-        console.log(allLocations)
-        const postNames = postsData.results.map((post) => post);
-        setRelatedPosts({ results: postNames });
-
-        const locationFollowers = followData.results.map((follower) => follower);
-        setFollowers({ results: locationFollowers });
-
-        const filteredPosts = postNames.filter((relatedPost) =>
-          relatedPost.name === locationResults[0]?.name
-        );
-        setFilteredPosts(filteredPosts);
-
-        const filteredFollowers = locationFollowers.filter(
-          (follower) => follower.follow_location === locationResults[0]?.owner
-        );
-        setFiltFollowers(filteredFollowers);
-        console.log(filtFollowers)
-        const filterFollow = followData.results
-          .filter((follower) => follower.owner === currentUser.username)
-          .map((follower) => follower.follow_location);
-        setCurrentUserFollowedLocations(filterFollow);
-        console.log(currentUserFollowedLocations)
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     fetchData();
   }, [id]);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setShowSpinner(false);
+    }, 2000); // Set the desired delay in milliseconds
+
+    return () => {
+      clearTimeout(timer);
+    };
+  }, []);
 
   return (
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
-        {hasLoaded ? (
+        {myLocations && !hasLoaded ? (
           <>
-            {location.results.length ? (
+            {myLocations.length ? (
               <InfiniteScroll
-                children={allLocations
-                  .filter((locations) => currentUserFollowedLocations.includes(locations.name))
-                  .map((locatio) => (
-                    <Link to={`/locations/${locatio.id}`} key={locatio.id}>
-                      <Location key={locatio.id} {...locatio} setLocations={setLocation} />
+                children={myLocations.map((location) => (
+                  <Location
+                    key={location.id}
+                    {...location}
+                    setMyLocations={setLocation}
+                    handleUnfollowLocation={handleUnfollowLocation}
+                  >
+                    <Link to={`/locations/${location.id}`}>
+                      <img src={location.imageUrl} alt={location.name} />
                     </Link>
-                  ))}
-                dataLength={location.results.length}
+                    
+                  </Location>
+                ))}
+                dataLength={myLocations.length}
                 loader={<Asset spinner />}
                 hasMore={!!location.next}
                 next={() => fetchMoreData(location, setLocation)}
               />
             ) : (
               <Container className={appStyles.Content}>
-                <Asset src={NoResults} message="No results found." />
+                {showSpinner ? (
+                  <Asset spinner />
+                ) : (
+                  <Asset src={NoResults} message={message} />
+                )}
               </Container>
             )}
           </>

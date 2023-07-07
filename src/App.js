@@ -43,11 +43,10 @@ function App() {
           <Route exact path="/profiles/:id" render={() => <ProfilePage />} />
           <Route
             exact
-            path="/followed"
+            path="/followed/"
             render={() => (
               <LocationsFollowed
-                message="No results found. Adjust the search keyword or follow a user."
-                filter={'followers.filter((follower) => follower.is_following === true)'}
+                message="You have nothing on your Bucket List.  :("
               />
             )}
           />
