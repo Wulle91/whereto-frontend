@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
@@ -28,44 +28,50 @@ function LocationsPage({ message, filter = "" }) {
   const { pathname } = useLocation();
    const { id } = useParams();
   const [query, setQuery] = useState("");
+  const [distances, setDistances] = useState();
+  const [locationsArray, setLocationsArray] = useState()
+  const [count, setCount] = useState(0)
+  
 
+
+  const fetchLocations = async () => {
+    try {
+      
+      const { data } = await axiosReq.get(`/locations/`);
+      setLocations(data);
+      const locationNames = data.results.map((locatio) => locatio)
+      setLocationsArray(locationNames)
+      const locNames = locationNames.map((loc) => loc.address)
+      setLocationsNames(locNames)
+      setHasLoaded(true);
+      
+      console.log('here')
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   useEffect(() => {
-    const fetchLocations = async () => {
-      try {
-        
-        const { data } = await axiosReq.get(`/locations/`);
-        setLocations(data);
-        const locationNames = data.results.map((locatio) => locatio)
-        const locNames = locationNames.map((loc) => loc.address)
-        setLocationsNames(locNames)
-        setHasLoaded(true);
-      } catch (err) {
-        console.log(err);
-      }
- 
-    };
-
-    setHasLoaded(false);
-    const timer = setTimeout(() => {
+    if (location.results.length === 0) {
+      setHasLoaded(false);
       fetchLocations();
-      
-    }, 1000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, [filter, query, pathname]);
-
+    }  
+  }, [location]);
   
 
-  
+  const handleDistancesChange = (newDistances) => {
+    const newDistancesArray = newDistances.map((distance) => ({ ...distance }));
+    setDistances(newDistancesArray);
+  };
+
+  console.log(locationsArray)
+  console.log(distances)
 
   return (
     <Row className="h-100">
       <Col className="py-2 p-0 p-lg-2" lg={8}>
         <PopularLocations mobile />
-        <MyMapComponent location={locationsNames}/>
+        <MyMapComponent location={locationsNames} onDistanceChange={handleDistancesChange} />
         <Form
           className={styles.SearchBar}
           onSubmit={(event) => event.preventDefault()}
