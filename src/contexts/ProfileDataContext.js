@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 import { axiosReq, axiosRes } from "../api/axiosDefaults";
 import { useCurrentUser } from "../contexts/CurrentUserContext";
 import { followHelper, followLocationHelper, 
-          unfollowHelper, unfollowLocationHelper} from "../utils/utils";
+          unfollowHelper } from "../utils/utils";
 
 
 const ProfileDataContext = createContext();

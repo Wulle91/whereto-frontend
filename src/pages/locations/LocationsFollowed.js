@@ -16,8 +16,8 @@ import { useSetProfileData } from "../../contexts/ProfileDataContext";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Link } from "react-router-dom";
 import btnStyles from "../../styles/Button.module.css";
-import { Button } from "react-bootstrap";
 import PopularLocations from "./PopularLocations";
+
 
 
 function LocationsFollowed({ message }) {
@@ -29,7 +29,6 @@ function LocationsFollowed({ message }) {
   const [hasLoaded, setHasLoaded] = useState(false);
   const [showSpinner, setShowSpinner] = useState(true);
   const { handleFollowLocation, handleUnfollowLocation } = useSetProfileData();
-  const [showButton, useShowwButton] = useState(true)
 
   const fetchData = async () => {
     try {
@@ -87,11 +86,13 @@ function LocationsFollowed({ message }) {
                     key={location.id}
                     {...location}
                     setMyLocations={setLocation}
+                    handleUnfollowLocation={handleUnfollowLocation}
                     showButton={false}
                   >
                     <Link to={`/locations/${location.id}`}>
                       <img src={location.imageUrl} alt={location.name} />
                     </Link>
+                    
                   </Location>
                 ))}
                 dataLength={myLocations.length}

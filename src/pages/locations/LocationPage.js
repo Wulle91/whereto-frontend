@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
@@ -11,9 +10,9 @@ import Location from "./Location"
 import Post from "../posts/Post"
 import InfiniteScroll from "react-infinite-scroll-component";
 import Asset from "../../comonents/Asset";
-import { fetchMoreData } from "../../utils/utils";
 import { useSetProfileData } from "../../contexts/ProfileDataContext";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
+import PopularLocations from "./PopularLocations";
 
 
 function LocationPage(message, filter = "" ) {
@@ -22,9 +21,6 @@ function LocationPage(message, filter = "" ) {
   const [posts, setPosts] = useState({ results: [] });
   const [relatedPosts, setRelatedPosts] = useState({ results: [] });
   const [followers, setFollowers] = useState({ results: [] });
-  const { pathname } = useLocation();
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const [query, setQuery] = useState("");
   const [filteredPosts, setFilteredPosts] = useState([]);
   const [filteredFollowers, setFilteredFollowers] = useState([]);
   const {handleFollowLocation, handleUnfollowLocation } = useSetProfileData();
@@ -90,7 +86,7 @@ function LocationPage(message, filter = "" ) {
   return (
     <Row className="h-100 ">
       <Col className="py-2 p-0 p-lg-2 py-7" style={backgroundImageStyle} lg={8}>
-        <p>popula</p>
+        <PopularLocations mobile />
       </Col>
         {/* <Location {...location.results[0]} setLocations={setLocation} LocationPage /> */}
         <Location
@@ -118,7 +114,7 @@ function LocationPage(message, filter = "" ) {
             </Container>
           )}
       <Col lg={4} className="d-none d-lg-block p-0 p-lg-2">
-        Popular profiles for desktop
+            <PopularLocations />
       </Col>
     </Row>
   );

@@ -11,19 +11,15 @@ import PostPage from "./pages/posts/PostPage";
 import PostsPage from "./pages/posts/PostsPage";
 import LocationPage from "./pages/locations/LocationPage";
 import LocationsPage from "./pages/locations/LocationsPage";
-import { useCurrentUser } from "./contexts/CurrentUserContext";
 import PostEditForm from "./pages/posts/PostEditForm";
 import ProfilePage from "./pages/profiles/ProfilePage";
 import UsernameForm from "./pages/profiles/UsernameForm";
 import UserPasswordForm from "./pages/profiles/UserPasswordForm";
 import ProfileEditForm from "./pages/profiles/ProfileEditForm";
-import LocationsFollowed from "./pages/locations/LocationsFollowed";
-import MyMapComponent from "../src/api/googleGeolocator" 
+import LocationsFollowed from "./pages/locations/LocationsFollowed"; 
 
 
 function App() {
-  const currentUser = useCurrentUser();
-  const profile_id = currentUser?.profile_id || "";
 
 
 

@@ -5,8 +5,6 @@
 }
 
 .Absolute {
-  position: absolute;
-  right: 0;
   z-index: 99;
 }
 .Custom {
@@ -16,4 +14,8 @@
 
 .Drop a {
   text-align: center;
+}
+
+.Absolute i {
+  float: right;
 }

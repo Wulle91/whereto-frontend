@@ -2,8 +2,7 @@ import React from "react";
 import Dropdown from "react-bootstrap/Dropdown";
 import styles from "../styles/MoreDropdown.module.css";
 import { useHistory } from "react-router";
-import { useCurrentUser, useSetCurrentUser } from "../contexts/CurrentUserContext";
-import Avatar from "./Avatar";
+import { useSetCurrentUser } from "../contexts/CurrentUserContext";
 import axios from 'axios';
 
 const ThreeDots = React.forwardRef(({ onClick }, ref) => (
@@ -44,7 +43,6 @@ export const MoreDropdown = ({ handleEdit, handleDelete }) => {
 
 export function ProfileEditDropdown({ id }) {
   const history = useHistory();
-  const currentUser = useCurrentUser();
   const setCurrentUser = useSetCurrentUser();
 
   const handleSignOut = async () => {
