@@ -8,14 +8,12 @@ import appStyles from "../../App.module.css";
 import { useParams } from "react-router";
 import { axiosReq } from "../../api/axiosDefaults";
 import Location from "./Location"
-import Post from "../posts/Post"
 import InfiniteScroll from "react-infinite-scroll-component";
 import Asset from "../../comonents/Asset";
 import { fetchMoreData } from "../../utils/utils";
 import { useSetProfileData } from "../../contexts/ProfileDataContext";
 import { useCurrentUser } from "../../contexts/CurrentUserContext";
 import { Link } from "react-router-dom";
-import btnStyles from "../../styles/Button.module.css";
 import PopularLocations from "./PopularLocations";
 
 
@@ -25,7 +23,6 @@ function LocationsFollowed({ message }) {
   const { id } = useParams();
   const [location, setLocation] = useState();
   const [myLocations, setMyLocations] = useState();
-  const { pathname } = useLocation();
   const [hasLoaded, setHasLoaded] = useState(false);
   const [showSpinner, setShowSpinner] = useState(true);
   const { handleFollowLocation, handleUnfollowLocation } = useSetProfileData();

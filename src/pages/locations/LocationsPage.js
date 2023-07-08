@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import haversine from 'haversine-distance';
-import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Container from "react-bootstrap/Container";
@@ -21,7 +20,6 @@ import axios from 'axios';
 function LocationsPage({ message, filter = "" }) {
   const [locations, setLocations] = useState({ results: [] });
   const [hasLoaded, setHasLoaded] = useState(false);
-  const [query, setQuery] = useState("");
   const [distances, setDistances] = useState([]);
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
