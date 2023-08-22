@@ -23,7 +23,7 @@ In addition to user-generated content, Whereto provides a comprehensive view of 
 
 Whereto empowers travelers to document their journeys, connect with like-minded individuals, and uncover hidden gems worldwide. With its intuitive interface, personalized content, and engagement-focused features, the app creates a vibrant and immersive travel community. Whether users seek inspiration, practical recommendations, or connections with fellow explorers, Whereto is the ultimate companion for their travel adventures.
 
-![Responsice Mockup](https://github.com/Wulle91/wheretofrontend/blob/main/assets/images/Capture.PNG)
+![Responsice Mockup](src/assets/images/Capture.PNG)
 
 ### User Stories
 
@@ -116,9 +116,41 @@ Implementing features such as screen reader compatibility, keyboard navigation, 
 
 HTML, JavaScript(React) and CSS were used to create this website.
 
+### Reusable React components
+
+Components that can be easily integrated into various parts of a React application, providing a consistent and efficient way to create user interfaces.
+
+#### Asset
+
+Spinners turning when aiting for component to load.
+
+#### Avatar
+
+User profile, on click we are taken on page of clicked profile.
+
+#### MoreDpropDown
+
+Dropdown to edit/delete posts or comments, also used to edit, delete or signout of own profile.
+
+#### NotFound
+
+Custom message displayed when a user navigates to a URL that doesn't correspond to any existing route or content in the application. 
+
+
+
 ### Frameworks, Libraries & Programs Used
 
 Balsamiq - Used to create wireframes.
+
+![Home Page](src/assets/images/Home.JPG)
+
+![Bucket Page](src/assets/images/Bucket.JPG)
+
+![Add post](src/assets/images/Create%20Post.JPG)
+
+![Whereto](src/assets/images/Whereto.JPG)
+
+![Profile](src/assets/images/User.JPG)
 
 Git - For version control.
 
@@ -138,39 +170,105 @@ Google Dev Tools - To troubleshoot and test features, solve issues with responsi
 
 
 
+### Testing
+
+  I have manually tested this project by doing following:
+
+  - Passed code throught PEP8 liner and confirmed there are no problems.
+            
+  - Given invalid inputs: strings when numbers are expected or out of bounds inputs
+
+  - Tested in my local terminal and the code intitute Heroku terminal
+
+
+
+`Whereto`
+
+| Feature | Expected Outcome | Testing Performed | Result | Pass/Fail |
+| --- | --- | --- | --- | --- |
+| Remove Sign In/out if user signed in | Tigned in | Sign in / Sign out button should disappear | Sign in / Sign out button disappeared  | Pass |
+| Create Profile | create Profile| Tryed to create profile | Profile created | Pass |
+| Create Post| create post, upload image set location | Post displayed on page | Post created| Pass |
+| Location suggestions | If user tryes to add location, google places are suggested | Typed one letter in locations form | Places suggested | Pass |
+| Edit Post| Edit post, imagee, location | Displayed post sholud be changed | Post changed | Pass |
+| Delete Post| Delete post | Post sholud not be displayed | Post is not displayed | Pass |
+| Like Post | Like posts | Liked one selected post | Post is displaying red heart | Pass |
+| Unlike Post | Unlike posts | Unliked one selected post | Post is not displaying red heart| Pass |
+| Comment Post | Leave comment on post | Wrote comment | comment displayed | Pass |
+| Home page | User can see all posts on homepage | Clicked on home | All posts displayed | Pass |
+| Bucked page | Logged in user can see Bucket and on click list all followed posts | Log in adn click on bucket | Followed locations diyplayed | Pass |
+| Edit Comment| Edit my comment | Displayed comment chould be changed | Comment changed | Pass |
+| Delete Comment| Delete Comment | Comment sholud not be displayed | Comment is not displayed | Pass |
+| Location created | On post creation location creates automaticly | Post created | Location created | Pass |
+| Location profile | Goaing on location profile we see all related posts | Clicked on location | All relevant posts displayed | Pass |
+| Follow user | Sellect user to follow | Follow displayed| Unfollow displayed | Pass |
+| Unfollow user | Sellect followed user to unfollow | Follow disappeared | Follow displayed | Pass |
+| Follow location| Sellect location to follow  | Follow displayed | Follow displaye | Pass |
+| Whereto places | Whereto section shows near places with distances | Clicked to Whereto | Places and distances shown | Pass |
+
+
+I confirmed that the form works: requires entries in every field, will only accept number in the inpput field, and the errors work properly.
+
+
+
+
 ### Frameworks, Libraries & Programs Used
 
 
 Bootstrap and React are powerful tools that I utilized in my project. 
 
 
-### Deployment
+## Deployment
 
-Github Pages was used to deploy the live website. The instructions to achieve this are below:
+## Version Control
 
-1. Log in (or sign up) to Github.
-2. Find the repository for this project, Bully-Book-Club.
-3. Click on the Settings link.
-4. Click on the Pages link in the left hand side navigation bar.
-5. In the Source section, choose main from the drop down select branch menu. Select Root from the drop down select folder menu.
-6. Click Save. Your live Github Pages site is now deployed at the URL shown.
+The site was created using the Gitpod editor and pushed to github to the remote repository ‘whereto-frontend’.
 
-### Local Development
+The following git commands were used throughout development to push code to the remote repo:
+
+```git add .``` - This command was used to add the file(s) to the staging area before they are committed.
+
+```git commit -m “commit message”``` - This command was used to commit changes to the local repository queue ready for the final step.
+
+```git push``` - This command was used to push all committed code to the remote repository on github.
+
+<hr>
+<br>
+
+## Heroku Deployment
+
+The site was deployed to Heroku. The steps to deploy are as follows:
+
+* Navigate to heroku and create an account
+* Click the new button in the top right corner
+* Select create new app
+* Enter app name
+* Select region and click create app
+* Click the resources tab and search for Heroku Postgres
+* Select hobby dev and continue
+* Click the deploy tab
+* Scroll down to Connect to GitHub/whereto-frontend and sign in / authorize when prompted
+* In the search box, find the repositoy you want to deploy and click connect
+* Scroll down to Manual deploy and choose the main branch
+* Click deploy
+
+<hr>
+<br>
 
 #### How to Fork
 
-To fork the Bully-Book-Club repository:
+To fork the whereto-frontend repository:
 
 1. Log in (or sign up) to Github.
-2. Go to the repository for this project, kera-cudmore/Bully-Book-Club.
+2. Go to the repository for this project, whereto-frontend.
 3. Click the Fork button in the top right corner.
 
 #### How to Clone
 
-To clone the Bully-Book-Club repository:
+To clone the whereto-frontend repository:
 
 1. Log in (or sign up) to GitHub.
-2. Go to the repository for this project, kera-cudmore/Bully-Book-Club.
+2. Go to the repository for this project, whereto-frontend.
 3. Click on the code button, select whether you would like to clone with HTTPS, SSH or GitHub CLI and copy the link shown.
 4. Open the terminal in your code editor and change the current working directory to the location you want to use for the cloned directory.
 5. Type 'git clone' into the terminal and then paste the link you copied in step 3. Press enter.
